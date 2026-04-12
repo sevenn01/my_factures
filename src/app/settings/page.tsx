@@ -17,7 +17,7 @@ interface InvitedUser {
   rule: string;
   created_at: string;
 }
-
+//55
 export default function SettingsPage() {
   const { activeCompany, companies, loading: companyLoading, refreshCompanies, setActiveCompany } = useCompany();
   const { theme, toggleTheme } = useTheme();
