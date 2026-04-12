@@ -1,0 +1,19 @@
+'use client';
+
+import React, { useState } from 'react';
+import Sidebar from '@/components/Sidebar';
+import MobileHeader from '@/components/ui/MobileHeader';
+
+export default function Shell({ children }: { children: React.ReactNode }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col lg:flex-row min-h-screen w-full relative">
+      <MobileHeader onMenuClick={() => setIsSidebarOpen(true)} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <main className="flex-1 min-h-screen transition-all duration-300" style={{ minWidth: 0 }}>
+        {children}
+      </main>
+    </div>
+  );
+}
