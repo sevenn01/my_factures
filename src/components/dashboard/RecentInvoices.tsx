@@ -30,7 +30,7 @@ export function RecentInvoices({ invoices, currency = 'DH' }: RecentInvoicesProp
   };
 
   return (
-    <div className="notion-box p-4 sm:p-6 border border-border bg-background shadow-sm flex flex-col h-full">
+    <div className="notion-box p-4 sm:p-6 border border-black/5 dark:border-white/5 bg-background shadow-sm flex flex-col h-full">
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <h3 className="text-[10px] sm:text-xs font-semibold text-muted uppercase tracking-wider">
           {t('dashboard.recentInvoices') || 'Recent Invoices'}

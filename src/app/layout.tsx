@@ -18,8 +18,41 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Invoice Me",
-  description: "Invoice management app",
+  title: {
+    default: "Monfactures | Smart Business Management",
+    template: "%s | Monfactures",
+  },
+  description: "A smooth, Notion-inspired ERP and CRM workspace. Manage invoices, clients, and products with total clarity and zero clutter.",
+  keywords: ["Invoice", "SaaS", "Business Management", "CRM", "ERP", "Billing", "Notion-like ERP", "Productivity"],
+  authors: [{ name: "Monfactures Team" }],
+  creator: "Monfactures",
+  publisher: "Monfactures",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://invoiceme.app"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    title: "Monfactures | The new standard for business management",
+    description: "A minimalist workspace that blends invoicing, client management, and product tracking into one seamless workflow.",
+    siteName: "Monfactures",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Monfactures | Manage your business with total clarity.",
+    description: "Simplified invoicing and client management for modern teams.",
+    creator: "@monfactures",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({

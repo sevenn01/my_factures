@@ -41,6 +41,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Ensure all clickable items show a hand cursor */
+a, button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"] {
+  cursor: pointer;
+}
+
 /* Base Notion-like inputs and boxes */
 .notion-box {
   background: var(--background);

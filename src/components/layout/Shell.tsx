@@ -1,11 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import MobileHeader from '@/components/ui/MobileHeader';
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isPublicRoute = pathname === '/' || pathname === '/login' || pathname === '/signup' || pathname === '/register';
+
+  if (isPublicRoute) {
+    return <main className="min-h-screen w-full">{children}</main>;
+  }
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen w-full relative">

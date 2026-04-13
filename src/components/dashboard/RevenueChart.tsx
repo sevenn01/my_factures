@@ -26,7 +26,7 @@ export function RevenueChart({ data, currency = 'DH' }: RevenueChartProps) {
   const { t } = useLanguage();
 
   return (
-    <div className="notion-box p-4 sm:p-6 border border-border bg-background shadow-sm h-[320px] sm:h-[400px] flex flex-col">
+    <div className="notion-box p-4 sm:p-6 border border-black/5 dark:border-white/5 bg-background shadow-sm h-[320px] sm:h-[400px] flex flex-col">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <h3 className="text-[10px] sm:text-xs font-semibold text-muted uppercase tracking-wider">
           {t('dashboard.revenueChart') || 'Revenue Overview'}

@@ -17,16 +17,16 @@ interface StatCardProps {
 
 export function StatCard({ title, value, icon: Icon, description, trend, color = 'blue' }: StatCardProps) {
   const colorMap = {
-    blue: 'text-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-300 border-blue-100/50 dark:border-blue-800/20',
-    green: 'text-green-600 bg-green-50/50 dark:bg-green-900/10 dark:text-green-300 border-green-100/50 dark:border-green-800/20',
-    orange: 'text-orange-600 bg-orange-50/50 dark:bg-orange-900/10 dark:text-orange-300 border-orange-100/50 dark:border-orange-800/20',
-    purple: 'text-purple-600 bg-purple-50/50 dark:bg-purple-900/10 dark:text-purple-300 border-purple-100/50 dark:border-purple-800/20',
+    blue: 'text-blue-600 bg-transparent dark:bg-blue-900/10 dark:text-blue-400 border border-transparent dark:border-blue-800/20',
+    green: 'text-green-600 bg-transparent dark:bg-green-900/10 dark:text-green-400 border border-transparent dark:border-green-800/20',
+    orange: 'text-orange-500 bg-transparent dark:bg-orange-900/10 dark:text-orange-400 border border-transparent dark:border-orange-800/20',
+    purple: 'text-purple-600 bg-transparent dark:bg-purple-900/10 dark:text-purple-400 border border-transparent dark:border-purple-800/20',
   };
 
   return (
-    <div className="notion-box p-4 sm:p-5 lg:p-6 border border-[var(--border)] bg-gradient-to-br from-[var(--background)] to-transparent backdrop-blur-sm shadow-sm transition-all duration-300 group flex flex-col justify-between min-h-[140px] sm:min-h-[160px]">
+    <div className="notion-box p-4 sm:p-5 lg:p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-[var(--background)] to-transparent backdrop-blur-sm shadow-sm transition-all duration-300 group flex flex-col justify-between min-h-[140px] sm:min-h-[160px]">
       <div className="flex items-start justify-between">
-        <div className={`p-2 sm:p-2.5 rounded-xl border ${colorMap[color]} shadow-sm transition-all duration-300`}>
+        <div className={`p-2 sm:p-2.5 rounded-xl ${colorMap[color]} transition-all duration-300`}>
           <Icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
         </div>
         {trend && (

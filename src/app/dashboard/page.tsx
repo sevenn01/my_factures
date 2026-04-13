@@ -147,11 +147,6 @@ export default function DashboardPage() {
     return null
   }
 
-  const handleSignOut = async () => {
-    await signOut()
-    router.push('/login')
-  }
-
   return (
     <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full transition-all duration-300">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
@@ -179,12 +174,6 @@ export default function DashboardPage() {
               <span className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-widest opacity-60">Active Workspace</span>
             </div>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="notion-btn notion-btn-secondary px-5 py-3 sm:py-3.5 rounded-2xl text-xs sm:text-sm font-black uppercase tracking-widest bg-[var(--background)] shadow-sm hover:text-red-500 hover:border-red-500/50 transition-all"
-          >
-            {t('common.logout')}
-          </button>
         </div>
       </div>
 
