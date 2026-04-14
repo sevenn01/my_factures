@@ -19,3 +19,4 @@
 
 //   return <div>Check console for signup result</div>
 // }
+export default function TestSignupPage() { return null; }
