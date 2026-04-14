@@ -16,10 +16,10 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen w-full relative">
+    <div className="flex flex-col lg:flex-row min-h-screen w-full relative print:block print:min-h-0 print:bg-white">
       <MobileHeader onMenuClick={() => setIsSidebarOpen(true)} />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <main className="flex-1 min-h-screen transition-all duration-300" style={{ minWidth: 0 }}>
+      <main className="flex-1 min-h-screen transition-all duration-300 print:min-h-0 print:bg-white" style={{ minWidth: 0 }}>
         {children}
       </main>
     </div>

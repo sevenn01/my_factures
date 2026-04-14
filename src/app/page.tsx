@@ -1,10 +1,11 @@
 'use client'
 
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/authContext'
 import { useLanguage } from '@/lib/languageContext'
-import { ArrowRight, CheckCircle2, LayoutDashboard, Receipt, Users, Zap, Globe } from 'lucide-react'
+import { ArrowRight, CheckCircle2, LayoutDashboard, Receipt, Users, Zap, Globe, ChevronDown } from 'lucide-react'
 
 // Localized strings purely for the static landing page.
 const landingDict = {
@@ -128,6 +129,18 @@ export default function Home() {
   const { user, loading } = useAuth()
   const router = useRouter()
   const { lang, setLang } = useLanguage()
+  const [langMenuOpen, setLangMenuOpen] = useState(false)
+  const langMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
+        setLangMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleProClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -157,17 +170,43 @@ export default function Home() {
           <div className="flex items-center gap-4">
             
             {/* Language Switcher */}
-            <div className="flex items-center gap-1.5 px-2 py-1 bg-neutral-100 rounded-md border border-neutral-200/60 ring-1 ring-black/5">
-              <Globe className="w-3.5 h-3.5 text-neutral-500" />
-              <select 
-                value={lang} 
-                onChange={(e) => setLang(e.target.value as any)} 
-                className="bg-transparent text-xs font-semibold text-neutral-700 focus:outline-none cursor-pointer appearance-none uppercase"
+            <div className="relative" ref={langMenuRef}>
+              <button 
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-neutral-50 rounded-lg border border-neutral-200/80 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-neutral-200"
               >
-                <option value="en">EN</option>
-                <option value="fr">FR</option>
-                <option value="ar">AR</option>
-              </select>
+                <Globe className="w-4 h-4 text-neutral-500" />
+                <span className="text-xs font-semibold text-neutral-700 uppercase">{lang}</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-neutral-400 transition-transform duration-200 ${langMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {langMenuOpen && (
+                <div className="absolute top-full right-0 mt-2 w-32 bg-white border border-neutral-200/80 shadow-xl rounded-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="p-1">
+                    {[
+                      { code: 'en', label: 'English' },
+                      { code: 'fr', label: 'Français' },
+                      { code: 'ar', label: 'العربية' }
+                    ].map((l) => (
+                      <button
+                        key={l.code}
+                        onClick={() => {
+                          setLang(l.code as any);
+                          setLangMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-lg transition-colors ${
+                          lang === l.code 
+                            ? 'bg-neutral-100/80 text-neutral-900 font-medium' 
+                            : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                        }`}
+                      >
+                        {l.label}
+                        {lang === l.code && <CheckCircle2 className="w-4 h-4 text-neutral-900" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {!loading && user ? (

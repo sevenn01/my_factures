@@ -12,7 +12,7 @@ export default function MobileHeader({ onMenuClick }: MobileHeaderProps) {
   const { activeCompany } = useCompany();
 
   return (
-    <header className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-[var(--border)] bg-[var(--background)] sticky top-0 z-40 transition-all duration-300">
+    <header className="print:hidden lg:hidden flex items-center justify-between px-4 py-3 border-b border-[var(--border)] bg-[var(--background)] sticky top-0 z-40 transition-all duration-300">
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 bg-[var(--foreground)] text-[var(--background)] rounded-lg flex items-center justify-center font-bold text-sm shadow-sm ring-1 ring-[var(--border)]">
           {activeCompany?.name?.charAt(0).toUpperCase() || <LayoutDashboard className="w-4 h-4" />}

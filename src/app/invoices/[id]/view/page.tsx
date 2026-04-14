@@ -119,7 +119,7 @@ export default function InvoiceViewPage() {
     <main className="flex-1 p-8 w-full max-w-5xl mx-auto print:p-0 print:m-0 print:max-w-none">
       
       {/* Top Action Bar (hidden on print) */}
-      <div className="print-hide flex items-center justify-between mb-8 bg-background z-10 sticky top-0 py-4 border-b border-border">
+      <div className="print:hidden flex items-center justify-between mb-8 bg-background z-50 sticky top-0 py-4 border-b border-border">
         <Link href="/invoices" className="text-muted hover:text-foreground inline-flex items-center gap-2 text-sm transition">
           {t('view.back')}
         </Link>

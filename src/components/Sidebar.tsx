@@ -59,7 +59,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         onClick={onClose}
       />
 
-      <aside className={`print-hide fixed lg:sticky top-0 left-0 z-50 h-screen border-r border-[var(--border)] bg-[var(--background)] p-4 flex flex-col transform transition-all duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'} ${isCollapsed ? 'lg:w-20 w-64' : 'w-64'} text-[14px]`}>
+      <aside className={`print:hidden fixed lg:sticky top-0 left-0 z-50 h-screen border-r border-[var(--border)] bg-[var(--background)] p-4 flex flex-col transform transition-all duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'} ${isCollapsed ? 'lg:w-20 w-64' : 'w-64'} text-[14px]`}>
         
         {/* Collapse Toggle (Desktop only) */}
         <button 
