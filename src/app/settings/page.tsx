@@ -43,7 +43,7 @@ export default function SettingsPage() {
   const [statusMsg, setStatusMsg] = useState("");
   const [currency, setCurrency] = useState("MAD");
 
-  // ── Workspaces State ──
+  // ── Workspaces State  ──
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceIce, setWorkspaceIce] = useState("");
   const [workspaceAddress, setWorkspaceAddress] = useState("");
