@@ -116,15 +116,15 @@ export default function InvoiceViewPage() {
   if (!invoice) return <div className="p-10 text-muted">{t('view.notFound')}</div>;
 
   return (
-    <main className="flex-1 p-8 w-full max-w-5xl mx-auto print:p-0 print:m-0 print:max-w-none">
+    <main className="flex-1 p-4 md:p-8 w-full max-w-5xl mx-auto print:p-0 print:m-0 print:max-w-none">
       
       {/* Top Action Bar (hidden on print) */}
-      <div className="print:hidden flex items-center justify-between mb-8 bg-background z-50 sticky top-0 py-4 border-b border-border">
-        <Link href="/invoices" className="text-muted hover:text-foreground inline-flex items-center gap-2 text-sm transition">
+      <div className="print:hidden flex items-center justify-between mb-8 bg-background z-40 sticky top-0 py-4 border-b border-border">
+        <Link href="/invoices" className="text-muted hover:text-foreground inline-flex items-center gap-2 text-xs sm:text-sm transition">
           {t('view.back')}
         </Link>
         <div className="flex gap-2">
-          <button onClick={handlePrint} className="notion-btn px-6 py-2">
+          <button onClick={handlePrint} className="notion-btn px-4 py-1.5 text-xs sm:text-sm sm:px-6 sm:py-2">
             {t('view.print')}
           </button>
         </div>
@@ -166,7 +166,7 @@ export default function InvoiceViewPage() {
             )}
 
             {/* Invoice Meta & Client Info */}
-            <div className="px-12 py-4 print:py-2 print:pt-10 print:mt-5 print:px-8 grid grid-cols-2 gap-8 text-sm ">
+            <div className="px-6 sm:px-12 py-4 print:py-2 print:pt-10 print:mt-5 print:px-8 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 text-sm ">
               <div>
                 <p className="text-gray-500 font-semibold mb-1 uppercase text-xs tracking-wider">{t('view.billTo')}</p>
                 <p className="font-bold text-gray-800 text-lg">{invoice.clients?.name}</p>
@@ -176,40 +176,40 @@ export default function InvoiceViewPage() {
                 {invoice.clients?.ice && <p className="text-gray-600 mt-1">{t('clients.ice')}: {invoice.clients.ice}</p>}
               </div>
               <div className="text-right">
-                <div className="mb-4">
-                  <p className="text-gray-500 font-semibold mb-1 uppercase text-xs tracking-wider">{t('view.invoiceReceipt')}</p>
-                  <p className="font-bold text-gray-800">#{invoice.id.split('-')[0].toUpperCase()}</p>
+                <div className="mb-2 sm:mb-4">
+                  <p className="text-gray-500 font-semibold mb-1 uppercase text-[10px] sm:text-xs tracking-wider">{t('view.invoiceReceipt')}</p>
+                  <p className="font-bold text-gray-800 text-sm sm:text-base">#{invoice.id.split('-')[0].toUpperCase()}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 font-semibold mb-1 uppercase text-xs tracking-wider">{t('invoices.date')}</p>
-                  <p className="text-gray-800">{new Date(invoice.created_at).toLocaleDateString()}</p>
+                  <p className="text-gray-500 font-semibold mb-1 uppercase text-[10px] sm:text-xs tracking-wider">{t('invoices.date')}</p>
+                  <p className="text-gray-800 text-sm sm:text-base">{new Date(invoice.created_at).toLocaleDateString()}</p>
                 </div>
               </div>
             </div>
 
             {/* Line Items Table */}
-            <div className=" px-12 print:px-8 flex-1 mt-4 print:mt-2">
+            <div className="px-6 sm:px-12 print:px-8 flex-1 mt-4 print:mt-2">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b-2 border-gray-200">
-                    <th className="py-3 font-bold text-gray-800 uppercase text-xs">{t('view.description')}</th>
-                    <th className="py-3 font-bold text-gray-800 uppercase text-xs text-center">{t('view.qty')}</th>
-                    <th className="py-3 font-bold text-gray-800 uppercase text-xs text-right">{t('view.unitPrice')}</th>
-                    <th className="py-3 font-bold text-gray-800 uppercase text-xs text-right">{t('view.amount')}</th>
+                    <th className="py-3 font-bold text-gray-800 uppercase text-[10px] sm:text-xs">{t('view.description')}</th>
+                    <th className="py-3 font-bold text-gray-800 uppercase text-[10px] sm:text-xs text-center">{t('view.qty')}</th>
+                    <th className="py-3 hidden sm:table-cell font-bold text-gray-800 uppercase text-xs text-right">{t('view.unitPrice')}</th>
+                    <th className="py-3 font-bold text-gray-800 uppercase text-[10px] sm:text-xs text-right">{t('view.amount')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((item, i) => (
                     <tr key={item.id || i} className="border-b border-gray-100">
-                      <td className="py-4 pr-4">
-                        <p className="font-medium text-gray-800">{item.products?.name}</p>
+                      <td className="py-4 pr-1 sm:pr-4">
+                        <p className="font-medium text-gray-800 text-xs sm:text-base">{item.products?.name}</p>
                         {item.products?.description && (
-                          <p className="text-gray-500 text-xs mt-1">{item.products.description}</p>
+                          <p className="text-gray-500 text-[10px] sm:text-xs mt-1">{item.products.description}</p>
                         )}
                       </td>
-                      <td className="py-4 text-center text-gray-800">{item.quantity}</td>
-                      <td className="py-4 text-right text-gray-800">{Number(item.price).toFixed(2)} {activeCompany?.currency || 'DH'}</td>
-                      <td className="py-4 text-right font-medium text-gray-800">{(item.quantity * item.price).toFixed(2)} {activeCompany?.currency || 'DH'}</td>
+                      <td className="py-4 text-center text-gray-800 text-xs sm:text-base">{item.quantity}</td>
+                      <td className="py-4 hidden sm:table-cell text-right text-gray-800">{Number(item.price).toFixed(2)} {activeCompany?.currency || 'DH'}</td>
+                      <td className="py-4 text-right font-medium text-gray-800 text-xs sm:text-base">{(item.quantity * item.price).toFixed(2)} {activeCompany?.currency || 'DH'}</td>
                     </tr>
                   ))}
                   {items.length === 0 && (
@@ -222,22 +222,22 @@ export default function InvoiceViewPage() {
 
               {/* Totals Box */}
               <div className="mt-4 print:mt-2 flex justify-end">
-                <div className="w-1/2 p-4 bg-gray-50 rounded-lg">
+                <div className="w-full sm:w-1/2 p-4 bg-gray-50 rounded-lg">
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-gray-500 font-medium text-xs uppercase">{t('view.untaxedAmount')}</span>
-                    <span className="text-gray-800 font-medium">
+                    <span className="text-gray-500 font-medium text-[10px] sm:text-xs uppercase">{t('view.untaxedAmount')}</span>
+                    <span className="text-gray-800 font-medium text-sm">
                       {(items.reduce((acc, item) => acc + (item.quantity * item.price), 0)).toFixed(2)} {activeCompany?.currency || 'DH'}
                     </span>
                   </div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-500 font-medium text-xs uppercase">{t('view.vat')} ({invoice.sales_taxes}%)</span>
-                    <span className="text-gray-800 font-medium">
+                    <span className="text-gray-500 font-medium text-[10px] sm:text-xs uppercase">{t('view.vat')} ({invoice.sales_taxes}%)</span>
+                    <span className="text-gray-800 font-medium text-sm">
                       {(items.reduce((acc, item) => acc + (item.quantity * item.price), 0) * (invoice.sales_taxes / 100)).toFixed(2)} {activeCompany?.currency || 'DH'}
                     </span>
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-                    <span className="font-bold text-gray-800 uppercase text-sm tracking-wide">{t('view.totalAmount')}</span>
-                    <span className="font-bold text-2xl text-gray-900">
+                    <span className="font-bold text-gray-800 uppercase text-xs sm:text-sm tracking-wide">{t('view.totalAmount')}</span>
+                    <span className="font-bold text-xl sm:text-2xl text-gray-900">
                       {Number(invoice.total).toFixed(2)} {activeCompany?.currency || 'DH'}
                     </span>
                   </div>

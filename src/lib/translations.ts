@@ -13,8 +13,10 @@ export const translations: TranslationMap = {
   'sidebar.preferences': { en: 'Preferences', fr: 'Pr\u00E9f\u00E9rences', ar: 'التفضيلات' },
   'sidebar.team': { en: 'Team', fr: '\u00C9quipe', ar: 'الفريق' },
   'sidebar.freePlan': { en: 'Free Plan', fr: 'Plan Gratuit', ar: 'الخطة المجانية' },
-  'sidebar.workspaceLimit': { en: '1 Workspace allowed.', fr: '1 Espace de travail autoris\u00E9.', ar: 'مساحة عمل واحدة مسموح بها.' },
-  'sidebar.upgradePlan': { en: 'Upgrade Plan', fr: 'Am\u00E9liorer le plan', ar: 'ترقية الخطة' },
+  'sidebar.proPlan': { en: 'Pro Plan', fr: 'Plan Pro', ar: 'الخطة برو' },
+  'sidebar.workspaceLimit': { en: 'Workspace limit', fr: 'Limite d\'espaces', ar: 'حد مساحات العمل' },
+  'sidebar.unlimitedWorkspaces': { en: 'Unlimited Workspaces', fr: 'Espaces illimités', ar: 'مساحات عمل غير محدودة' },
+  'sidebar.upgradePlan': { en: 'Upgrade Plan', fr: 'Améliorer le plan', ar: 'ترقية الخطة' },
 
   // ── Dashboard ──
   'dashboard.title': { en: 'Dashboard', fr: 'Tableau de bord', ar: 'لوحة القيادة' },
@@ -172,6 +174,12 @@ export const translations: TranslationMap = {
   'settings.creating': { en: 'Creating...', fr: 'Création...', ar: 'جاري الإنشاء...' },
   'settings.switchWorkspace': { en: 'Switch to this Workspace', fr: 'Passer à cet espace', ar: 'التبديل إلى مساحة العمل هذه' },
   'settings.manageOtherWorkspaces': { en: 'Other Workspaces', fr: 'Autres espaces', ar: 'مساحات عمل أخرى' },
+  'settings.addNewWorkspace': { en: 'Add Workspace', fr: 'Ajouter un espace', ar: 'إضافة مساحة عمل' },
+  'settings.upgradeToProToMore': { en: 'Upgrade to Pro', fr: 'Passer en Pro', ar: 'الترقية إلى برو' },
+  'settings.limitReached': { en: 'Workspace Limit Reached', fr: 'Limite d\'espaces atteinte', ar: 'تم الوصول إلى حد مساحات العمل' },
+  'settings.freePlanLimitDesc': { en: 'The Free plan is limited to 1 workspace. Upgrade to Pro to create unlimited spaces for all your companies.', fr: 'Le plan Gratuit est limité à 1 espace. Passeez en Pro pour créer des espaces illimités.', ar: 'الخطة المجانية محدودة بمساحة عمل واحدة. قم بالترقية إلى برو لإنشاء مساحات عمل غير محدودة.' },
+  'settings.upgradePlan': { en: 'Upgrade Now', fr: 'Améliorer maintenant', ar: 'ترقية الآن' },
+  'settings.cancel': { en: 'Cancel', fr: 'Annuler', ar: 'إلغاء' },
 
   // ── Team / Invite ──
   'team.inviteUser': { en: 'Invite User', fr: 'Inviter un utilisateur', ar: 'دعوة مستخدم' },

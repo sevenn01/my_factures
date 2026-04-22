@@ -16,6 +16,7 @@ interface AuthContextType {
   }>
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
+  isPro: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -40,6 +41,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => subscription.unsubscribe()
   }, [])
+
+  const isPro = user?.user_metadata?.plan === 'pro'
 
     const signUp = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({
@@ -68,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, isPro }}>
       {children}
     </AuthContext.Provider>
   )

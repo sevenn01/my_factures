@@ -1,8 +1,31 @@
 "use client"
 
 import Link from 'next/link'
+import { supabase } from '@/lib/supabaseClient'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/authContext'
 
 export default function PricingPage() {
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const { isPro } = useAuth()
+
+  const handleUpgrade = async () => {
+    setLoading(true)
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: { plan: 'pro' }
+      })
+      if (error) throw error
+      alert("Success! You are now on the PRO plan.")
+      router.push('/settings')
+    } catch (err: any) {
+      alert("Error upgrading: " + err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <main className="flex-1 p-10 max-w-5xl mx-auto w-full">
       <Link href="/dashboard" className="text-[var(--muted)] hover:text-[var(--foreground)] mb-8 inline-flex items-center gap-2 text-sm transition">
@@ -38,7 +61,13 @@ export default function PricingPage() {
             <li className="flex gap-2 items-center"><svg className="w-4 h-4 text-[#2383e2]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg> API Access</li>
             <li className="flex gap-2 items-center"><svg className="w-4 h-4 text-[#2383e2]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg> Custom Invoice Themes</li>
           </ul>
-          <button className="notion-btn w-full" onClick={() => alert("Subscription integration coming soon!")}>Upgrade to Pro</button>
+          <button 
+            className="notion-btn w-full disabled:opacity-50" 
+            onClick={handleUpgrade}
+            disabled={loading || isPro}
+          >
+            {isPro ? 'Already Pro' : loading ? 'Upgrading...' : 'Upgrade to Pro'}
+          </button>
         </div>
 
       </div>

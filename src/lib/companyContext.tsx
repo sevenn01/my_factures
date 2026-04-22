@@ -27,9 +27,17 @@ const CompanyContext = createContext<CompanyContextType | undefined>(undefined)
 
 export function CompanyProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
-  const [activeCompany, setActiveCompany] = useState<Company | null>(null)
+  const [activeCompany, _setActiveCompany] = useState<Company | null>(null)
   const [companies, setCompanies] = useState<Company[]>([])
   const [loading, setLoading] = useState(true)
+
+  // Wrapped setActiveCompany to save to local storage
+  const setActiveCompany = (company: Company | null) => {
+    _setActiveCompany(company)
+    if (company) {
+      localStorage.setItem('monfactures_active_company_id', company.id)
+    }
+  }
 
   const fetchCompanies = async () => {
     if (!user) {
@@ -51,23 +59,36 @@ export function CompanyProvider({ children }: { children: React.ReactNode }) {
       if (error) throw error
 
       if (data && data.length > 0) {
-        // Map the tricky join structure to a flat company array
         const fetchedCompanies = data
           .map((item: any) => item.companies)
           .filter(Boolean) as Company[]
         
         setCompanies(fetchedCompanies)
 
-        // Select the first company if no active company is set or if active doesn't exist anymore
-        if (fetchedCompanies.length > 0 && !activeCompany) {
-          setActiveCompany(fetchedCompanies[0])
+        // Persistence Logic: Restore from localStorage if available
+        const savedId = typeof window !== 'undefined' ? localStorage.getItem('monfactures_active_company_id') : null
+        
+        let target = null
+        if (savedId) {
+          target = fetchedCompanies.find(c => c.id === savedId)
         }
+
+        // Fallback or Initial Selection
+        if (!target && fetchedCompanies.length > 0) {
+          target = fetchedCompanies[0]
+        }
+
+        if (target) {
+          // Use _setActiveCompany to avoid redundant localStorage.set in this initial fetch
+          _setActiveCompany(target)
+        }
+        
       } else {
         setCompanies([])
         setActiveCompany(null)
       }
     } catch (error) {
-      console.error('Error fetching companies:', error)
+      console.error('[CompanyContext] Error fetching companies:', error)
     } finally {
       setLoading(false)
     }

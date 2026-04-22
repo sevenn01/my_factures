@@ -159,7 +159,7 @@ export default function Home() {
             <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center">
               <Receipt className="w-5 h-5 text-white" />
             </div>
-            <span className="font-medium text-lg tracking-tight">Monfactures</span>
+            <span className="font-medium text-lg tracking-tight hidden sm:block">Monfactures</span>
           </div>
           
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600">
@@ -176,7 +176,7 @@ export default function Home() {
                 className="flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-neutral-50 rounded-lg border border-neutral-200/80 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-neutral-200"
               >
                 <Globe className="w-4 h-4 text-neutral-500" />
-                <span className="text-xs font-semibold text-neutral-700 uppercase">{lang}</span>
+                <span className="text-xs font-semibold text-neutral-700 uppercase hidden sm:inline">{lang}</span>
                 <ChevronDown className={`w-3.5 h-3.5 text-neutral-400 transition-transform duration-200 ${langMenuOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -225,10 +225,12 @@ export default function Home() {
               </Link>
             )}
             <Link 
-              href={user ? "/dashboard" : "/login"}
-              className="bg-neutral-900 text-white px-4 py-2 text-sm font-medium rounded-md hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
+              href={user ? "/dashboard" : "/signup"}
+              className="bg-neutral-900 text-white px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-md hover:bg-neutral-800 transition-colors flex items-center gap-1.5 whitespace-nowrap"
             >
-              {t.getStarted} {!rtl && <ArrowRight className="w-4 h-4" />}
+              <span className="hidden sm:inline">{t.getStarted}</span>
+              <span className="sm:hidden">{t.getStarted.includes(' ') ? t.getStarted.split(' ')[0] : t.getStarted}</span>
+              {!rtl && <ArrowRight className="w-4 h-4 shrink-0" />}
             </Link>
           </div>
         </div>
@@ -250,7 +252,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
-              href={user ? "/dashboard" : "/login"}
+              href={user ? "/dashboard" : "/signup"}
               className="w-full sm:w-auto bg-neutral-900 text-white px-8 py-4 text-base font-medium rounded-lg hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
             >
               {t.startFree} {!rtl && <ArrowRight className="w-5 h-5" />}
@@ -333,7 +335,7 @@ export default function Home() {
                 </li>
               </ul>
               <Link 
-                href="/login"
+                href="/signup"
                 className="w-full bg-neutral-100 text-neutral-900 px-6 py-3.5 rounded-xl font-medium hover:bg-neutral-200 transition-colors text-center inline-block"
               >
                 {t.getStarted}
@@ -373,12 +375,12 @@ export default function Home() {
                   <span>{t.proPerk5}</span>
                 </li>
               </ul>
-              <button 
-                onClick={handleProClick}
-                className="w-full bg-white text-neutral-900 px-6 py-3.5 rounded-xl font-medium hover:bg-neutral-100 transition-colors text-center"
+              <Link 
+                href="/signup"
+                className="w-full bg-white text-neutral-900 px-6 py-3.5 rounded-xl font-medium hover:bg-neutral-100 transition-colors text-center no-underline"
               >
                 {t.upgradeToPro}
-              </button>
+              </Link>
             </div>
           </div>
         </section>

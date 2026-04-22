@@ -7,9 +7,9 @@ import { supabase } from '@/lib/supabaseClient'
 import { useCompany } from '@/lib/companyContext'
 
 export default function CompanySetupPage() {
-  const { user, loading } = useAuth()
+  const { user, loading, isPro } = useAuth()
   const router = useRouter()
-  const { refreshCompanies } = useCompany()
+  const { refreshCompanies, companies } = useCompany()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -24,6 +24,14 @@ export default function CompanySetupPage() {
       router.push('/login')
     }
   }, [loading, user, router])
+
+  // Plan Check: Redirect if Free user already has a company
+  useEffect(() => {
+    if (!loading && user && !isPro && companies.length >= 1) {
+      // Allow it ONLY if they have NO companies yet
+      router.push('/dashboard')
+    }
+  }, [loading, user, isPro, companies.length, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,8 +80,9 @@ export default function CompanySetupPage() {
       await refreshCompanies()
 
       router.push('/dashboard')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create company')
+    } catch (err: any) {
+      console.error('[CompanySetup] Error:', err);
+      setError(err.message || 'Failed to create company')
     } finally {
       setSaving(false)
     }

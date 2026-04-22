@@ -16,7 +16,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Sun,
-  Moon
+  Moon,
+  ChevronsUpDown,
+  Settings,
+  Plus
 } from "lucide-react";
 import { useAuth } from "@/lib/authContext";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -29,7 +32,8 @@ interface SidebarProps {
 export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { activeCompany } = useCompany();
+  const { user, isPro } = useAuth();
+  const { activeCompany, companies, setActiveCompany } = useCompany();
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
   const { signOut } = useAuth();
@@ -37,6 +41,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isUpgradePopupOpen, setIsUpgradePopupOpen] = useState(false);
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
+  const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
 
   // Hide sidebar on these routes
   if (['/login', '/signup', '/company-setup'].includes(pathname)) {
@@ -46,6 +51,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const handleLogout = async () => {
     try {
       await signOut();
+      router.push('/login');
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -55,11 +61,11 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     <>
       {/* Mobile Backdrop */}
       <div 
-        className={`fixed inset-0 bg-black/20 backdrop-blur-[2px] z-40 transition-opacity lg:hidden ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[90] transition-opacity lg:hidden ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
-      <aside className={`print:hidden fixed lg:sticky top-0 left-0 z-50 h-screen border-r border-[var(--border)] bg-[var(--background)] p-4 flex flex-col transform transition-all duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'} ${isCollapsed ? 'lg:w-20 w-64' : 'w-64'} text-[14px]`}>
+      <aside className={`print:hidden fixed lg:sticky top-0 left-0 z-[100] h-screen border-r border-[var(--border)] bg-[var(--background)] p-4 flex flex-col transform transition-all duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'} ${isCollapsed ? 'lg:w-20 w-64' : 'w-64'} text-[14px]`}>
         
         {/* Collapse Toggle (Desktop only) */}
         <button 
@@ -69,22 +75,65 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           {isCollapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
         </button>
 
-        {/* Workspace Selector -> Links to Settings */}
-        <Link 
-          href="/settings"
-          onClick={onClose}
-          className={`flex items-center gap-3 mb-8 p-2.5 hover:bg-[var(--hover-bg)] rounded-xl cursor-pointer transition-all active:scale-[0.98] select-none border border-transparent hover:border-[var(--border)] group ${isCollapsed ? 'lg:justify-center' : ''}`}
-        >
-          <div className="w-8 h-8 shrink-0 bg-[var(--foreground)] text-[var(--background)] rounded-lg flex items-center justify-center font-black text-sm shadow-md group-hover:shadow-[var(--focus-ring)] transition-all">
-            {activeCompany?.name?.charAt(0).toUpperCase() || 'W'}
-          </div>
-          <div className={`flex flex-col min-w-0 flex-1 overflow-hidden transition-all duration-200 ${isCollapsed ? 'lg:hidden' : ''}`}>
-            <div className="font-bold text-[var(--foreground)] truncate leading-tight">
-              {activeCompany?.name || 'Workspace'}
+        {/* Workspace Switcher */}
+        <div className="relative mb-8">
+          <button 
+            onClick={() => setIsSwitcherOpen(!isSwitcherOpen)}
+            className={`w-full flex items-center gap-3 p-2.5 hover:bg-[var(--hover-bg)] rounded-xl cursor-pointer transition-all active:scale-[0.98] select-none border border-transparent hover:border-[var(--border)] group ${isCollapsed ? 'lg:justify-center' : ''}`}
+          >
+            <div className="w-8 h-8 shrink-0 bg-[var(--foreground)] text-[var(--background)] rounded-lg flex items-center justify-center font-black text-sm shadow-md group-hover:shadow-[var(--focus-ring)] transition-all">
+              {activeCompany?.name?.charAt(0).toUpperCase() || 'W'}
             </div>
-            <div className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-widest mt-0.5">Settings</div>
-          </div>
-        </Link>
+            <div className={`flex items-center justify-between min-w-0 flex-1 overflow-hidden transition-all duration-200 ${isCollapsed ? 'lg:hidden' : ''}`}>
+              <div className="flex flex-col items-start min-w-0">
+                <div className="font-bold text-[var(--foreground)] truncate leading-tight w-full text-left">
+                  {activeCompany?.name || 'Workspace'}
+                </div>
+                <div className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-widest mt-0.5">Switch Space</div>
+              </div>
+              <ChevronsUpDown className="w-3.5 h-3.5 text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors shrink-0" />
+            </div>
+          </button>
+
+          {/* Switcher Dropdown */}
+          {isSwitcherOpen && (
+            <div className={`absolute top-full left-0 w-full mt-2 bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-xl z-[60] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 ${isCollapsed ? 'lg:w-[220px] lg:left-0' : ''}`}>
+              <div className="max-h-[300px] overflow-y-auto p-2 space-y-1 no-scrollbar">
+                <div className="px-2 py-1.5 text-[10px] font-black text-[var(--muted)] uppercase tracking-widest opacity-70">Your Workspaces</div>
+                {companies.map((comp) => (
+                  <button
+                    key={comp.id}
+                    onClick={() => {
+                      setActiveCompany(comp);
+                      setIsSwitcherOpen(false);
+                      if (onClose) onClose();
+                    }}
+                    className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left ${
+                      comp.id === activeCompany?.id 
+                        ? 'bg-[var(--hover-bg)] text-[var(--foreground)]' 
+                        : 'text-[var(--muted)] hover:bg-[var(--hover-bg)] hover:text-[var(--foreground)]'
+                    }`}
+                  >
+                    <div className="w-6 h-6 shrink-0 bg-[var(--foreground)] text-[var(--background)] rounded flex items-center justify-center font-bold text-xs">
+                      {comp.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="font-bold text-sm truncate">{comp.name}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="p-2 border-t border-[var(--border)] bg-[var(--hover-bg)]/30">
+                <Link 
+                  href="/settings" 
+                  onClick={() => { setIsSwitcherOpen(false); if (onClose) onClose(); }}
+                  className="flex items-center gap-2.5 px-2 py-2 text-xs font-bold text-[var(--muted)] hover:text-[var(--foreground)] transition-colors rounded-lg hover:bg-[var(--hover-bg)]"
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                  Manage workspaces
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Navigation */}
         <nav className="flex flex-col gap-1.5 text-[var(--muted)] font-bold flex-1 overflow-y-auto overflow-x-hidden no-scrollbar">
@@ -127,12 +176,14 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
             <div className={`flex flex-col ${isCollapsed ? 'lg:hidden' : ''}`}>
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)] flex items-center gap-1.5 truncate">
-                  <Sparkles className="w-3 h-3 text-blue-500" />
-                  {t('sidebar.freePlan')}
+                  <Sparkles className={`w-3 h-3 ${isPro ? 'text-orange-500' : 'text-blue-500'}`} />
+                  {isPro ? t('sidebar.proPlan') : t('sidebar.freePlan')}
                 </span>
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0"></div>
+                <div className={`w-1.5 h-1.5 rounded-full animate-pulse shrink-0 ${isPro ? 'bg-orange-500' : 'bg-blue-500'}`}></div>
               </div>
-              <p className="text-[10px] text-[var(--muted)] font-bold truncate">{t('sidebar.workspaceLimit')}</p>
+              <p className="text-[10px] text-[var(--muted)] font-bold truncate">
+                {isPro ? t('sidebar.unlimitedWorkspaces') : `${companies.length}/1 ${t('sidebar.workspaceLimit')}`}
+              </p>
             </div>
           </div>
 

@@ -82,6 +82,26 @@ export default function ProductsPage() {
 
   const executeDelete = async (id: string) => {
     try {
+      // Check if product is used in any invoice
+      const { count, error: countErr } = await supabase
+        .from('invoice_items')
+        .select('*', { count: 'exact', head: true })
+        .eq('product_id', id);
+
+      if (countErr) throw countErr;
+
+      if (count && count > 0) {
+        setDialogConfig({
+          isOpen: true,
+          title: t('common.notice') || 'Notice',
+          message: t('products.hasInvoicesError') || "Cannot delete product because it is already used in existing invoices. Please remove it from the invoices first.",
+          type: 'info',
+          hideCancel: true,
+          onConfirm: () => setDialogConfig(null)
+        });
+        return;
+      }
+
       const { error } = await supabase.from('products').delete().eq('id', id);
       if (error) throw error;
       fetchProducts();
@@ -139,25 +159,25 @@ export default function ProductsPage() {
                    : t('products.import');
 
   return (
-    <main className="flex-1 p-10 max-w-none mx-auto w-full">
-      <div className="flex items-center justify-between mb-8">
+    <main className="flex-1 p-4 md:p-10 max-w-7xl mx-auto w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <h1 className="notion-title" style={{ fontSize: "1.5rem", margin: 0 }}>{t('products.title')}</h1>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-2">
           <ViewToggle view={viewMode} onChange={handleViewChange} />
           <button 
-            className="notion-btn w-auto px-4 py-2" 
+            className="notion-btn w-auto px-3 py-1.5 text-xs sm:text-sm sm:px-4 sm:py-2" 
             onClick={() => { setShowPanel(true); setPanelMode('create'); setSelectedProduct(null); }}
           >
             {t('products.newProduct')}
           </button>
           <button 
-            className="notion-btn notion-btn-secondary w-auto px-4 py-2" 
+            className="notion-btn notion-btn-secondary w-auto px-3 py-1.5 text-xs sm:text-sm sm:px-4 sm:py-2" 
             onClick={() => { setShowPanel(true); setPanelMode('import'); setSelectedProduct(null); }}
           >
             {t('products.import')}
           </button>
           <button 
-            className="notion-btn notion-btn-secondary w-auto px-4 py-2" 
+            className="notion-btn notion-btn-secondary w-auto px-3 py-1.5 text-xs sm:text-sm sm:px-4 sm:py-2" 
             onClick={handleExport}
           >
             {t('products.export')}

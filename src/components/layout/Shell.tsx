@@ -4,10 +4,22 @@ import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import MobileHeader from '@/components/ui/MobileHeader';
+import { useCompany } from '@/lib/companyContext';
+import { useEffect } from 'react';
+import { useLanguage } from '@/lib/languageContext';
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const { activeCompany } = useCompany();
+  const { t } = useLanguage();
+
+  // Update document title dynamically
+  useEffect(() => {
+    if (activeCompany?.name) {
+      document.title = `${activeCompany.name} | Monfactures`;
+    }
+  }, [activeCompany?.name]);
 
   const isPublicRoute = pathname === '/' || pathname === '/login' || pathname === '/signup' || pathname === '/register';
 
