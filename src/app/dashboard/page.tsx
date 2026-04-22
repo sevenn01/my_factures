@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { StatCard } from '@/components/dashboard/StatCard'
 import { RevenueChart } from '@/components/dashboard/RevenueChart'
 import { RecentInvoices } from '@/components/dashboard/RecentInvoices'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { 
   Plus, 
   Users, 
@@ -20,7 +21,9 @@ import {
   AlertCircle,
   ChevronRight,
   TrendingUp,
-  LayoutDashboard
+  LayoutDashboard,
+  Trash2,
+  RefreshCw
 } from 'lucide-react'
 
 export default function DashboardPage() {
@@ -38,6 +41,8 @@ export default function DashboardPage() {
   const [chartData, setChartData] = useState<any[]>([])
   const [recentInvoices, setRecentInvoices] = useState<any[]>([])
   const [fetching, setFetching] = useState(false)
+  const [resetting, setResetting] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
 
   const fetchDashboardData = async () => {
     if (!activeCompany?.id) return
@@ -123,6 +128,42 @@ export default function DashboardPage() {
     }
   }
 
+  const handleResetData = async () => {
+    if (!activeCompany?.id) return
+    setResetting(true)
+    try {
+      // 1. Get all invoices for this company to identify items
+      const { data: invs } = await supabase
+        .from('invoices')
+        .select('id')
+        .eq('company_id', activeCompany.id)
+      
+      const invIds = invs?.map(i => i.id) || []
+
+      // 2. Delete in order to satisfy FK constraints
+      if (invIds.length > 0) {
+        await supabase.from('invoice_items').delete().in('invoice_id', invIds)
+        await supabase.from('invoices').delete().in('id', invIds)
+      }
+
+      // 3. Delete clients and products
+      await Promise.all([
+        supabase.from('clients').delete().eq('company_id', activeCompany.id),
+        supabase.from('products').delete().eq('company_id', activeCompany.id)
+      ])
+
+      // 4. Refresh UI
+      await fetchDashboardData()
+      
+    } catch (err: any) {
+      console.error('Error resetting data:', err)
+      alert('Failed to reset data: ' + err.message)
+    } finally {
+      setResetting(false)
+      setShowResetConfirm(false)
+    }
+  }
+
   useEffect(() => {
     if (user && activeCompany) {
       fetchDashboardData()
@@ -173,6 +214,26 @@ export default function DashboardPage() {
               <span className="text-xs sm:text-sm font-black text-[var(--foreground)] leading-none mb-1 truncate max-w-[150px]">{activeCompany?.name}</span>
               <span className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-widest opacity-60">Active Workspace</span>
             </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => fetchDashboardData()} 
+              disabled={fetching}
+              className="p-2.5 rounded-xl bg-[var(--hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-blue-500 transition-all active:scale-95 disabled:opacity-50"
+              title={t('common.refresh') || 'Refresh'}
+            >
+              <RefreshCw className={`w-5 h-5 ${fetching ? 'animate-spin' : ''}`} />
+            </button>
+            
+            <button 
+              onClick={() => setShowResetConfirm(true)} 
+              disabled={resetting}
+              className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95 disabled:opacity-50"
+              title={t('dashboard.resetData') || 'Reset Data'}
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
@@ -270,6 +331,16 @@ export default function DashboardPage() {
           </Link>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showResetConfirm}
+        onClose={() => setShowResetConfirm(false)}
+        onConfirm={handleResetData}
+        title={t('dashboard.resetData') || 'Reset Data'}
+        message={t('dashboard.resetConfirm') || 'Are you sure you want to delete everything?'}
+        confirmText={resetting ? t('dashboard.resetting') : t('common.delete')}
+        type="danger"
+      />
     </main>
   )
 }

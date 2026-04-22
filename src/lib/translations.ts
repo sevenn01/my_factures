@@ -37,6 +37,13 @@ export const translations: TranslationMap = {
   'dashboard.manageCrm': { en: 'Manage CRM', fr: 'G\u00E9rer la relation client', ar: 'إدارة العملاء' },
   'dashboard.productsServices': { en: 'Products & Services', fr: 'Produits & Services', ar: 'المنتجات والخدمات' },
   'dashboard.upgradePro': { en: 'Upgrade Pro', fr: 'Passer en Pro', ar: 'ترقية برو' },
+  'dashboard.resetData': { en: 'Reset Data', fr: 'R\u00E9initialiser les donn\u00E9es', ar: '\u0625\u0639\u0627\u062F\u0629 \u0636\u0628\u0637 \u0627\u0644\u0628\u064A\u0627\u0646\u0627\u062A' },
+  'dashboard.resetConfirm': { 
+    en: 'Are you sure you want to delete ALL invoices, clients, and products? This action is IRREVERSIBLE.', 
+    fr: '\u00CATes-vous s\u00FBr de vouloir supprimer TOUTES les factures, clients et produits ? Cette action est IRR\u00C9VERSIBLE.', 
+    ar: '\u0647\u0644 \u0623\u0646\u062A \u0645\u062A\u0623\u0643\u062F \u0623\u0646\u0643 \u062A\u0631\u064A\u062F \u062D\u0630\u0641 \u062C\u0645\u064A\u0631 \u0627\u0644\u0641\u0648\u0627\u062A\u064A\u0631 \u0648\u0627\u0644\u0639\u0645\u0644\u0627\u0621 \u0648\u0627\u0644\u0645\u0646\u062A\u062C\u0627\u062A\u061F \u0647\u0630\u0627 \u0627\u0644\u0625\u062C\u0631\u0627\u0621 \u063A\u064A\u0631 \u0641\u0627\u0628\u0644 \u0644\u0644\u062A\u0631\u0627\u062C\u0639.' 
+  },
+  'dashboard.resetting': { en: 'Resetting...', fr: 'R\u00E9initialisation...', ar: '\u062C\u0627\u0631\u064A \u0625\u0639\u0627\u062F\u0629 \u0627\u0644\u0636\u0628\u0637...' },
 
   // ── Products ──
   'products.title': { en: 'Products', fr: 'Produits', ar: 'المنتجات' },
@@ -143,9 +150,12 @@ export const translations: TranslationMap = {
   'settings.title': { en: 'Settings', fr: 'Param\u00E8tres', ar: 'الإعدادات' },
   'settings.tabTemplates': { en: 'Invoice Templates', fr: 'Mod\u00E8les de facture', ar: 'قوالب الفاتورة' },
   'settings.tabPreferences': { en: 'Preferences', fr: 'Pr\u00E9f\u00E9rences', ar: 'التفضيلات' },
-  'settings.tabTeam': { en: 'Team', fr: '\u00C9quipe', ar: 'الفريق' },
+  'settings.tabTeam': { en: 'Team', fr: 'Équipe', ar: 'الفريق' },
   'settings.tabWorkspaces': { en: 'Workspaces', fr: 'Espaces', ar: 'مساحات العمل' },
-  'settings.headerImage': { en: 'Header Image', fr: "Image d'en-t\u00EAte", ar: 'صورة الرأس' },
+  'settings.tabProfile': { en: 'Profile', fr: 'Profil', ar: 'الملف الشخصي' },
+  'settings.displayName': { en: 'Display Name', fr: 'Nom d\'affichage', ar: 'اسم العرض' },
+  'settings.email': { en: 'Account Email', fr: 'Email du compte', ar: 'البريد الإلكتروني للحساب' },
+  'settings.headerImage': { en: 'Header Image', fr: "Image d'en-tête", ar: 'صورة الرأس' },
   'settings.footerImage': { en: 'Footer Image', fr: 'Image de pied de page', ar: 'صورة التذييل' },
   'settings.watermarkImage': { en: 'Watermark / Background Image', fr: 'Filigrane / Image de fond', ar: 'العلامة المائية / صورة الخلفية' },
   'settings.uploadFile': { en: 'Upload File', fr: 'T\u00E9l\u00E9charger un fichier', ar: 'رفع ملف' },

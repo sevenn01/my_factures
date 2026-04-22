@@ -24,6 +24,21 @@ interface RevenueChartProps {
 
 export function RevenueChart({ data, currency = 'DH' }: RevenueChartProps) {
   const { t } = useLanguage();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="notion-box p-4 sm:p-6 border border-black/5 dark:border-white/5 bg-background shadow-sm h-[320px] sm:h-[400px] flex items-center justify-center">
+        <div className="text-muted animate-pulse text-xs tracking-widest uppercase">Loading Chart...</div>
+      </div>
+    );
+  }
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
 
   return (
     <div className="notion-box p-4 sm:p-6 border border-black/5 dark:border-white/5 bg-background shadow-sm h-[320px] sm:h-[400px] flex flex-col">
@@ -43,7 +58,7 @@ export function RevenueChart({ data, currency = 'DH' }: RevenueChartProps) {
         </div>
       </div>
 
-      <div className="flex-1 w-full mt-2">
+      <div className="flex-1 w-full mt-2 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -80,13 +95,13 @@ export function RevenueChart({ data, currency = 'DH' }: RevenueChartProps) {
               dataKey="total" 
               fill="#2383e2" 
               radius={[2, 2, 0, 0]} 
-              barSize={window?.innerWidth < 640 ? 12 : 24}
+              barSize={isMobile ? 12 : 24}
             />
             <Bar 
               dataKey="paid" 
               fill="#10b981" 
               radius={[2, 2, 0, 0]} 
-              barSize={window?.innerWidth < 640 ? 12 : 24}
+              barSize={isMobile ? 12 : 24}
             />
           </BarChart>
         </ResponsiveContainer>
